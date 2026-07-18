@@ -169,10 +169,10 @@ def _parse_common(text: str, **options: Any) -> datetime | date | time:
     if not m.group("time"):
         return date(year, month, day)
 
-    # Grabbing hh:mm:ss
+    # Grabbing hh:mm:ss (minute and second are optional in COMMON)
     hour = int(m.group("hour"))
 
-    minute = int(m.group("minute"))
+    minute = int(m.group("minute")) if m.group("minute") else 0
 
     second = int(m.group("second")) if m.group("second") else 0
 

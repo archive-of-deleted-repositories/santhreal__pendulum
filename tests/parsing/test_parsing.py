@@ -584,6 +584,29 @@ def test_exact():
     assert parsed.microsecond == 0
 
 
+def test_time_optional_minute():
+    # COMMON allows HH: with optional minutes; default minute like optional second
+    text = "12:"
+
+    parsed = parse(text, exact=True)
+
+    assert isinstance(parsed, datetime.time)
+    assert parsed.hour == 12
+    assert parsed.minute == 0
+    assert parsed.second == 0
+    assert parsed.microsecond == 0
+
+    text = "9:"
+
+    parsed = parse(text, exact=True)
+
+    assert isinstance(parsed, datetime.time)
+    assert parsed.hour == 9
+    assert parsed.minute == 0
+    assert parsed.second == 0
+    assert parsed.microsecond == 0
+
+
 def test_edge_cases():
     text = "2013-11-1"
 
