@@ -288,6 +288,10 @@ class Interval(Duration, Generic[_T]):
         return separator.join(parts)
 
     def range(self, unit: str, amount: int = 1) -> Iterator[_T]:
+        # Non-positive amount never advances start and loops forever.
+        if amount <= 0:
+            raise ValueError("amount must be a positive integer")
+
         method = "add"
         op = operator.le
         if not self._absolute and self.invert:

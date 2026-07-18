@@ -117,3 +117,21 @@ def test_range_amount():
     assert_datetime(r[1], 2016, 10, 16, 1, 0, 0)
     assert_datetime(r[2], 2016, 10, 18, 0, 0, 0)
     assert_datetime(r[3], 2016, 10, 20, 0, 0, 0)
+
+
+def test_range_non_positive_amount_raises():
+    dt1 = pendulum.datetime(2000, 1, 1)
+    dt2 = pendulum.datetime(2000, 1, 10)
+    p = pendulum.interval(dt1, dt2)
+    for amount in (0, -1, -5):
+        try:
+            next(p.range("days", amount))
+        except ValueError as exc:
+            assert "amount must be a positive integer" in str(exc)
+        else:
+            raise AssertionError(f"expected ValueError for amount={amount}")
+    # Positive amount still yields the expected endpoints.
+    r = list(p.range("days", 1))
+    assert len(r) == 10
+    assert_datetime(r[0], 2000, 1, 1, 0, 0, 0)
+    assert_datetime(r[-1], 2000, 1, 10, 0, 0, 0)
